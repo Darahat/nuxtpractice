@@ -28,16 +28,16 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKER_USERNAME }}/nuxtjspractice
+          images: ${{ secrets.DOCKER_USERNAME }}/nuxtpractice
 
       # Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/nuxtjspractice:latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/nuxtpractice:latest .
 
       # Push the Docker image to Docker Hub
       - name: Push Docker image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/nuxtjspractice:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/nuxtpractice:latest
           docker push ${{ steps.meta.outputs.tags }}
           docker push ${{ steps.meta.outputs.labels }}
