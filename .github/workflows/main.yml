@@ -22,7 +22,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
       # Extract Docker metadata for automatic tags
       - name: Extract Docker metadata
         id: meta
@@ -40,3 +39,14 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/nuxtpractice:latest
           docker push ${{ steps.meta.outputs.tags }}
+
+      - name: Set Up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.CPANEL_SSH_KEY }}
+
+      - name: Deploy to cPanel
+        run: |
+          ssh -o StrictHostKeyChecking=no bauedu@webhost.bdren.net.bd "
+            cd ~/repositories/nuxtpractice &&
+            git pull origin main"
