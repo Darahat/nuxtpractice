@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build
 
 # Expose the port on which your application will run
-EXPOSE 3000
+EXPOSE 4000
 
 # Start the Nuxt.js application
 CMD ["npx", "nuxt", "dev"]
