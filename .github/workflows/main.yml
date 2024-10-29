@@ -28,7 +28,7 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.CPANEL_SSH_KEY }}
           REMOTE_HOST: "webhost.bdren.net.bd"
-          REMOTE_USER: "your_cpanel_user"  # Replace with your actual cPanel username
+          REMOTE_USER: "bauedu"  # Replace with your actual cPanel username
           TARGET: "~/public_html/darahat"  # Ensure this matches your target directory on cPanel
         with:
           source: ".output/public/*"  # Points to the static build output of Nuxt
