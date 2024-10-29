@@ -32,5 +32,5 @@ jobs:
           TARGET: "~/public_html/darahat"  # Ensure this matches your target directory on cPanel
         with:
           source: ".output/public/*"  # Points to the static build output of Nuxt
-          remote_port: "2222"  # Replace "2222" with the correct port if it's not 22
+          remote_port: "21"  # Replace "2222" with the correct port if it's not 22
 
