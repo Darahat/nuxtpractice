@@ -1,4 +1,4 @@
-name: CI
+name: CI and Deploy to cPanel
 
 on:
   push:
@@ -8,45 +8,27 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Check out the repository
+      # Check out the code
       - name: Check out the code
         uses: actions/checkout@v4
 
-      # Log in to Docker Hub
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      # Extract Docker metadata for automatic tags
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ secrets.DOCKER_USERNAME }}/nuxtpractice
-
-      # Build the Docker image with multiple tags
-      - name: Build Docker image
+      # Install dependencies and build the project
+      - name: Install dependencies and build
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/nuxtpractice:latest -t ${{ steps.meta.outputs.tags }} .
+          npm install
+          npm run build
 
-      # Push the Docker image to Docker Hub
-      - name: Push Docker image
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/nuxtpractice:latest
-          docker push ${{ steps.meta.outputs.tags }}
-
-      - name: Set Up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.CPANEL_SSH_KEY }}
-
+      # Deploy to cPanel (Static Files)
       - name: Deploy to cPanel
-        run: |
-          ssh -o StrictHostKeyChecking=no bauedu@webhost.bdren.net.bd "
-            cd ~/repositories/nuxtpractice &&
-            git pull origin main"
+        uses: easingthemes/ssh-deploy@v2.1.5
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.CPANEL_SSH_KEY }}
+          REMOTE_HOST: "webhost.bdren.net.bd"
+          REMOTE_USER: "your_cpanel_user"  # Replace with your actual cPanel username
+          TARGET: "~/public_html/darahat"  # Ensure this matches your target directory on cPanel
+        with:
+          source: ".output/public/*"  # Points to the static build output of Nuxt
