@@ -16,8 +16,6 @@ RUN npm install -g nuxi
 # Copy the rest of the application code to the working directory
 COPY . .
 
-# Build the Nuxt.js application
-RUN npm run build
 
 # Expose the port on which your application will run
 EXPOSE 3000
