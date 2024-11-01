@@ -16,7 +16,6 @@ RUN npm install -g nuxi
 # Copy the rest of the application code to the working directory
 COPY . .
 
-
 # Expose the port on which your application will run
 EXPOSE 3000
 
