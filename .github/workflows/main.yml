@@ -1,36 +1,31 @@
-name: CI and Deploy to cPanel
+name: Build and Deploy
 
 on:
   push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # Check out the code
-      - name: Check out the code
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      # Install dependencies and build the project
-      - name: Install dependencies and build
-        run: |
-          npm install
-          npm run build
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v1
 
-      # Deploy to cPanel (Static Files)
-      - name: Deploy to cPanel
-        uses: easingthemes/ssh-deploy@v2.1.5
+      - name: Build Docker image
+        run: docker build -t nuxtpractice .
+
+      - name: Run build command
+        run: docker run --rm -v ${{ github.workspace }}:/app nuxtpractice npm run build
+
+      - name: Deploy build files to AlmaLinux server
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.CPANEL_SSH_KEY }}
-          REMOTE_HOST: "webhost.bdren.net.bd"
-          REMOTE_USER: "bauedu"  # Replace with your actual cPanel username
-          TARGET: "~/public_html/darahat"  # Ensure this matches your target directory on cPanel
-        with:
-          source: ".output/public/*"  # Points to the static build output of Nuxt
-          remote_port: "21"  # Replace "2222" with the correct port if it's not 22
-
+          SERVER: ${{ secrets.MY_SERVER_IP }}
+          USERNAME: ${{ secrets.SERVER_USERNAME }}
+          PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+        run: |
+          rsync -avz --delete ./build/ ${{ env.USERNAME }}@${{ env.SERVER }}:/home/nuxtproject/
