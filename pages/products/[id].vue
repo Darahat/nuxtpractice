@@ -6,7 +6,6 @@
         </Head>
 <ProductDetails :product="product"/>
     </div>
-  
 </template>
 
 <script setup>
