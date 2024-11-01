@@ -10,6 +10,9 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
+# If Nuxt CLI is needed globally, install it globally
+RUN npm install -g nuxi
+
 # Copy the rest of the application code to the working directory
 COPY . .
 
@@ -17,7 +20,7 @@ COPY . .
 RUN npm run build
 
 # Expose the port on which your application will run
-EXPOSE 4000
+EXPOSE 3000
 
 # Start the Nuxt.js application
 CMD ["npx", "nuxt", "dev"]
