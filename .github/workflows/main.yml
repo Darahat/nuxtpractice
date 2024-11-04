@@ -26,7 +26,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key  # Ensure the private key has the correct permissions
 
       - name: Test SSH Connection with Key
         env:
