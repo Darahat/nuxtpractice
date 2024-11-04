@@ -22,6 +22,12 @@ jobs:
       - name: Run build command inside Docker
         run: docker run --rm nuxtpractice
 
+      - name: Check Secret Variables (Debug)
+        run: |
+          echo "Server IP: ${{ secrets.MY_SERVER_IP }}"
+          echo "Username: ${{ secrets.SERVER_USERNAME }}"
+          echo "Password Length: ${#secrets.SERVER_PASSWORD}"
+
       - name: Deploy build files to AlmaLinux server
         env:
           SERVER: ${{ secrets.MY_SERVER_IP }}
