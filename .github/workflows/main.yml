@@ -22,16 +22,14 @@ jobs:
       - name: Run build command inside Docker
         run: docker run --rm nuxtpractice
 
-      - name: Check Secret Variables (Debug)
+      - name: Set up SSH key
         run: |
-          echo "Server IP: ${{ secrets.MY_SERVER_IP }}"
-          echo "Username: ${{ secrets.SERVER_USERNAME }}"
-          echo "Password Length: ${{secrets.SERVER_PASSWORD}}"
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
 
-      - name: Deploy build files to AlmaLinux server
+      - name: Test SSH Connection with Key
         env:
           SERVER: ${{ secrets.MY_SERVER_IP }}
           USERNAME: ${{ secrets.SERVER_USERNAME }}
-          PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
-          rsync -avz --delete ./build/ ${{ env.USERNAME }}@${{ env.SERVER }}:/home/nuxtproject/
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ env.USERNAME }}@${{ env.SERVER }} "echo 'SSH connection successful'"
