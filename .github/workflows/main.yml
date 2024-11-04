@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "Server IP: ${{ secrets.MY_SERVER_IP }}"
           echo "Username: ${{ secrets.SERVER_USERNAME }}"
-          echo "Password Length: ${#secrets.SERVER_PASSWORD}"
+          echo "Password Length: ${secrets.SERVER_PASSWORD}"
 
       - name: Deploy build files to AlmaLinux server
         env:
