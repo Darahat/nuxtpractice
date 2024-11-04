@@ -20,10 +20,14 @@ jobs:
         run: docker build -t nuxtpractice .
 
       - name: Run build command inside Docker
-        run: docker run --rm nuxtpractice
+        run: |
+          docker run --rm -v $GITHUB_WORKSPACE:/app -w /app nuxtpractice npm run build
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
 
       - name: Set up SSH key
         run: |
+          mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
@@ -33,3 +37,10 @@ jobs:
           USERNAME: ${{ secrets.SERVER_USERNAME }}
         run: |
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ env.USERNAME }}@${{ env.SERVER }} "echo 'SSH connection successful'"
+
+      - name: Deploy build files using rsync
+        env:
+          SERVER: ${{ secrets.MY_SERVER_IP }}
+          USERNAME: ${{ secrets.SERVER_USERNAME }}
+        run: |
+          rsync -avz -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" ./build/ ${{ env.USERNAME }}@${{ env.SERVER }}:/home/nuxtproject/
