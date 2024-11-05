@@ -31,8 +31,8 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
 
       - name: Add server to known hosts
-        run: ssh-keyscan -H your_server_ip >> ~/.ssh/known_hosts
+        run: ssh-keyscan -H 103.90.2.3 >> ~/.ssh/known_hosts
 
       - name: Deploy build to server
         run: |
-          scp -r .output/public user@your_server_ip:/path/to/your/deployment/folder
+          scp -r .output/public root@103.90.2.3:~/home/nuxtproject
