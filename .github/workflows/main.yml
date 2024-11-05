@@ -1,43 +1,38 @@
-name: Build and Deploy
+name: Deploy to Server
 
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v1
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
 
-      - name: Build Docker image
-        run: docker build -t nuxtpractice .
+      - name: Install dependencies
+        run: npm install
 
-      - name: Run build command inside Docker
-        run: docker run --rm nuxtpractice
+      - name: Build Nuxt.js project
+        run: npm run build
 
-      - name: Set up SSH key
+      - name: Copy SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key  # Ensure the private key has the correct permissions
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
 
-      - name: Test SSH Connection with Key
-        env:
-          SERVER: ${{ secrets.MY_SERVER_IP }}
-          USERNAME: ${{ secrets.SERVER_USERNAME }}
-        run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ env.USERNAME }}@${{ env.SERVER }} "echo 'SSH connection successful'"
+      - name: Add server to known hosts
+        run: ssh-keyscan -H your_server_ip >> ~/.ssh/known_hosts
 
-      - name: Deploy build files using rsync
-        env:
-          SERVER: ${{ secrets.MY_SERVER_IP }}
-          USERNAME: ${{ secrets.SERVER_USERNAME }}
+      - name: Deploy build to server
         run: |
-          rsync -avz -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" ./build/ ${{ env.USERNAME }}@${{ env.SERVER }}:/home/nuxtproject/
+          scp -r .output/public user@your_server_ip:/path/to/your/deployment/folder
