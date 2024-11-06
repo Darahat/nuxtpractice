@@ -39,4 +39,4 @@ jobs:
 
       - name: Deploy build to server
         run: |
-          scp -r .output/public deployer@103.90.2.3:/var/www/nuxt-app
+          scp -r .output/public root@103.90.2.3:/home/nuxtpractice
