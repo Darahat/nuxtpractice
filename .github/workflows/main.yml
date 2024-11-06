@@ -28,7 +28,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
-      - name: Add server to known hosts
+      - name: Add server to known host
         run: ssh-keyscan -H 103.90.2.3 >> ~/.ssh/known_hosts
 
       - name: Deploy build to servers
