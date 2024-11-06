@@ -22,12 +22,6 @@ jobs:
       - name: Run build command inside Docker
         run: docker run --rm nuxtpractice
 
-      - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key  # Ensure the private key has the correct permissions
-
       - name: Copy SSH key
         run: |
           mkdir -p ~/.ssh
