@@ -39,8 +39,8 @@ jobs:
 
       - name: Ensure directory on remote server and copy files
         run: |
-          ssh -i ~/.ssh/id_ed25519 user@${{ secrets.SERVER_IP }} 'mkdir -p /home/***'
-          scp -i ~/.ssh/id_ed25519 nuxtpractice.tar user@${{ secrets.SERVER_IP }}:/home/***/nuxtpractice.tar
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} 'mkdir -p /home/***'
+          scp -i ~/.ssh/id_ed25519 nuxtpractice.tar ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }}:/home/***/nuxtpractice.tar
 
       # Step 6: Copy Docker image file to the remote server
       - name: Copy Docker image to server
