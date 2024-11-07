@@ -34,6 +34,9 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H "${{ secrets.MY_SERVER_IP }}" >> ~/.ssh/known_hosts
 
+      - name: Archive build files
+        run: tar -cvf nuxtpractice.tar .output/public
+
       # Step 6: Copy Docker image file to the remote server
       - name: Copy Docker image to server
         run: |
