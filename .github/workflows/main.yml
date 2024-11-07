@@ -37,6 +37,11 @@ jobs:
       - name: Archive build files
         run: tar -cvf nuxtpractice.tar .output/public
 
+      - name: Ensure directory on remote server and copy files
+        run: |
+          ssh -i ~/.ssh/id_ed25519 user@${{ secrets.SERVER_IP }} 'mkdir -p /home/***'
+          scp -i ~/.ssh/id_ed25519 nuxtpractice.tar user@${{ secrets.SERVER_IP }}:/home/***/nuxtpractice.tar
+
       # Step 6: Copy Docker image file to the remote server
       - name: Copy Docker image to server
         run: |
