@@ -44,7 +44,7 @@ jobs:
         run: rm nuxtpractice.tar
 
       # Step 8: Load and run Docker image on the remote server
-      - name: Deploy on server
+      - name: Deploy on servers
         run: |
           ssh -i ~/.ssh/id_ed25519 ${{ secrets.SERVER_USERNAME }}@${{ secrets.MY_SERVER_IP }} << 'EOF'
             # Load Docker image from file
