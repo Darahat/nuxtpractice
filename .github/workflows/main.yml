@@ -29,6 +29,6 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H 103.90.2.3 >> ~/.ssh/known_hosts
 
-      - name: Copy files to servers
+      - name: Copy files to server
         run: |
           scp -i ~/.ssh/id_ed25519 -r .output/public root@103.90.2.3:/home/nuxtpractice
