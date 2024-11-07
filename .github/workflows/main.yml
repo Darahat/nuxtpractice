@@ -34,9 +34,10 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H "${{ secrets.MY_SERVER_IP }}" >> ~/.ssh/known_hosts
 
-      # Step 6: Copy Docker image file to the remote server
-      - name: Copy Docker image to server
+      # Step 6: Ensure directory on remote server and copy Docker image file
+      - name: Create target directory and copy Docker image to server
         run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SERVER_USERNAME }}@${{ secrets.MY_SERVER_IP }} 'mkdir -p /home/${{ secrets.SERVER_USERNAME }}'
           scp -i ~/.ssh/id_ed25519 nuxtpractice.tar ${{ secrets.SERVER_USERNAME }}@${{ secrets.MY_SERVER_IP }}:/home/${{ secrets.SERVER_USERNAME }}/nuxtpractice.tar
 
       # Step 7: Clean up local Docker image file
