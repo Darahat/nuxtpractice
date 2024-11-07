@@ -22,9 +22,11 @@ jobs:
       - name: Build Docker image
         run: docker build -t nuxtpractice .
 
-      # Step 4: Save Docker image to a .tar file
+      # Step 4: Save Docker image to a .tar file and verify creation
       - name: Save Docker image to file
-        run: docker save -o nuxtpractice.tar nuxtpractice
+        run: |
+          docker save -o nuxtpractice.tar nuxtpractice
+          ls -l nuxtpractice.tar  # Verify the file exists
 
       # Step 5: Set up SSH key for secure connection to server
       - name: Set up SSH key
