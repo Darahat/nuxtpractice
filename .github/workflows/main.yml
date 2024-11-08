@@ -42,9 +42,9 @@ jobs:
           ssh -i ~/.ssh/id_ed25519 ${{ secrets.SERVER_USERNAME }}@${{ secrets.MY_SERVER_IP }} 'mkdir -p /home/${{ secrets.SERVER_USERNAME }}'
           scp -i ~/.ssh/id_ed25519 nuxtpractice.tar ${{ secrets.SERVER_USERNAME }}@${{ secrets.MY_SERVER_IP }}:/home/${{ secrets.SERVER_USERNAME }}/nuxtpractice.tar
 
-      # Step 7: Clean up local Docker image file
-      - name: Remove local image file
-        run: rm nuxtpractice.tar
+      # # Step 7: Clean up local Docker image file
+      # - name: Remove local image file
+      #   run: rm nuxtpractice.tar
 
       # Step 8: Load and run Docker image on the remote server
       - name: Deploy on server
